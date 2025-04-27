@@ -1,2 +1,5 @@
-.env
+# Ignore virtual environment
 myenv/
+
+# Ignore environment variable files
+.env
