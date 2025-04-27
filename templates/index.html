@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Virtual Gynecologist Chabot Assistant </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .chat-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #adddf7ec;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(255, 105, 180, 0.15);
+            padding: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+        .chat-container::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                linear-gradient(45deg, rgba(255, 214, 227, 0.45) 25%, transparent 25%),
+                linear-gradient(-45deg, rgba(255, 214, 227, 0.454) 25%, transparent 25%);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+        .chat-history {
+            max-height: 350px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: 
+                url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23f8bbd0' fill-opacity='0.2'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E"),
+                linear-gradient(to bottom right, #fff0f6, #ffe5f4);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+        .chat-bubble {
+            padding: 12px 18px;
+            margin-bottom: 12px;
+            border-radius: 20px;
+            max-width: 80%;
+            word-break: break-word;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            animation: messageAppear 0.4s ease-out;
+        }
+        @keyframes messageAppear {
+            from { opacity: 0; transform: translateY(10px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .user-bubble {
+            background: linear-gradient(100deg, #ffd6e3 0%, #ffb6d5 60%, #f485ee 100%);
+            color: #6d214f;
+            margin-left: auto;
+            text-align: right;
+            border-bottom-right-radius: 6px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+            transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .user-bubble:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255,110,199,0.15);
+        }
+        .bot-bubble {
+            background: linear-gradient(90deg, #fff0f6 0%, #ffe5f4 100%);
+            color: #d63384;
+            margin-right: auto;
+            text-align: left;
+            border: 2px solid #ffe5f2;
+            border-bottom-left-radius: 6px;
+            font-weight: bold;
+            font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+        }
+        .bot-bubble:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(214,51,132,0.1);
+        }
+        .chat-label {
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            letter-spacing: 0.5px;
+            background: linear-gradient(90deg, #ff6ec7, #ff3b6e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            /* -webkit-text-fill-color: transparent; */
+            animation: labelSlide 0.5s ease-out;
+            display: inline-block;
+        }
+        .user-bubble .chat-label {
+            /* Override for "You" label */
+            background: none;
+            color: #fff !important;
+            background-color: #d63384;
+            border-radius: 999px;
+            padding: 2px 16px;
+            font-size: 1rem;
+            font-weight: 900;
+            box-shadow: 0 2px 6px rgba(219, 10, 114, 0.10);
+            text-shadow: 0 1px 2px #d63384, 0 0 1px #fff;
+            border: none;
+            letter-spacing: 1px;
+        }
+        @keyframes labelSlide {
+            from { opacity: 0; transform: translateX(-10px);}
+            to { opacity: 1; transform: translateX(0);}
+        }
+        .ask-btn {
+            background: linear-gradient(135deg, #ff6ec7, #ff3b6e);
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 24px;
+            transition: all 0.3s ease;
+        }
+        .ask-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(255,110,199,0.3);
+        }
+    </style>
+    <!-- Google Fonts: Poppins (for chat bubbles) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="chat-container">
+        <h1 class="text-center mb-4" style="color: #ff3b6e; text-shadow: 2px 2px 4px rgba(255,184,208,0.2);">
+            Virtual Gynecologist Chabot Assistant 
+        </h1>
+        <form method="post" id="ask_form" class="d-flex mb-3">
+            <input 
+                type="text" 
+                id="user_input" 
+                name="user_input" 
+                class="form-control me-2" 
+                autocomplete="off" 
+                required 
+                placeholder="Ask about health, wellness, or anything...">
+            <button type="submit" class="ask-btn">Ask</button>
+        </form>
+        <div class="chat-history" id="chat_history">
+            {% for role, text in chat_history %}
+                <div class="chat-bubble {% if role == 'You' %}user-bubble{% else %}bot-bubble{% endif %}">
+                    <div class="chat-label">{{ role }}</div>
+                    {{ text|safe }}
+                </div>
+            {% endfor %}
+        </div>
+        <a href="{{ url_for('reset') }}" class="btn btn-link" style="color: black; font-weight: 500;">Reset Conversation</a>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

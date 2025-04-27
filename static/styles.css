@@ -1,0 +1,185 @@
+body {
+    /* Pink gradient with subtle SVG circle pattern overlay */
+    background-color: #ffd6e3;
+    background-image:
+        url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='40' cy='40' r='38' stroke='%23f8bbd0' stroke-width='2' fill='none'/%3E%3C/svg%3E"),
+        linear-gradient(135deg, #ffd6e3 0%, #ffb6d5 100%);
+    background-repeat: repeat;
+    background-size: 200px 200px, cover;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.chat-container {
+    max-width: 600px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(255, 105, 180, 0.10);
+    padding: 32px;
+}
+
+h1 {
+    color: #d63384;
+    text-align: center;
+    margin-bottom: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+form {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 18px;
+    justify-content: center;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #f8bbd0;
+    border-radius: 6px;
+    font-size: 16px;
+    background: #fff0f6;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+    border-color: #d63384;
+    background: #ffe0ef;
+}
+
+button, .ask-btn {
+    background: linear-gradient(90deg, #db0a72 0%, #f485ee 100%);
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 24px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(219, 10, 114, 0.12);
+}
+
+button:hover, .ask-btn:hover {
+    background: linear-gradient(90deg, #f485ee 0%, #db0a72 100%);
+    box-shadow: 0 4px 16px rgba(219, 10, 114, 0.18);
+}
+
+.chat-history {
+    max-height: 350px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding-right: 5px;
+}
+
+.chat-bubble {
+    padding: 12px 18px;
+    margin-bottom: 12px;
+    border-radius: 20px;
+    max-width: 80%;
+    word-break: break-word;
+    box-shadow: 0 2px 8px rgba(255, 105, 180, 0.04);
+    font-size: 1rem;
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    position: relative;
+}
+
+.user-bubble,
+.bot-bubble {
+    background: linear-gradient(100deg, #ffd6e3 0%, #ffb6d5 70%, #f485ee 100%);
+    color: #6d214f;
+    font-weight: bold;
+    font-size: 1.1rem;
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.user-bubble {
+    margin-left: auto;
+    text-align: right;
+    border-bottom-right-radius: 6px;
+}
+.user-bubble:hover,
+.bot-bubble:hover {
+    box-shadow: 0 4px 16px rgba(244,133,238,0.17);
+    transform: scale(1.03);
+}
+
+.bot-bubble {
+    margin-right: auto;
+    text-align: left;
+    border-bottom-left-radius: 6px;
+}
+
+.user-bubble .chat-label {
+    background: linear-gradient(90deg, #ff3b6e 0%, #d63384 100%);
+    color: #fff !important;
+    border: none;
+    font-weight: 900;
+    text-shadow: 0 1px 2px #d63384, 0 0 1px #fff;
+    padding: 2px 16px;
+    border-radius: 999px;
+    display: block;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+    font-size: 1rem;
+    box-shadow: 0 2px 6px rgba(219, 10, 114, 0.10);
+}
+
+.bot-bubble .chat-label {
+    background: linear-gradient(90deg, #d1a3ff 0%, #6c63ff 100%);
+    color: #fff !important;
+    border: none;
+    font-weight: 800;
+    text-shadow: 0 1px 2px #6c63ff, 0 0 1px #fff;
+    padding: 2px 16px;
+    border-radius: 999px;
+    display: block;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+    font-size: 1rem;
+    box-shadow: 0 2px 6px rgba(108, 99, 255, 0.10);
+}
+
+.chat-label {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 3px;
+    letter-spacing: 0.5px;
+    background: linear-gradient(90deg, #db0a72 0%, #e4dae3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    display: block;
+}
+
+a {
+    display: inline-block;
+    margin-top: 18px;
+    color: #d63384;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #ad1457;
+}
+
+/* Scrollbar styling for chat history */
+.chat-history::-webkit-scrollbar {
+    width: 8px;
+}
+.chat-history::-webkit-scrollbar-thumb {
+    background: #f8bbd0;
+    border-radius: 7px;
+}
+.chat-history::-webkit-scrollbar-track {
+    background: #b2fda8;
+}
